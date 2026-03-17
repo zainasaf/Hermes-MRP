@@ -1,0 +1,208 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-02-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+
+library(here)
+library(tidyverse)
+
+```
+
+```{r}
+
+all_overall <- read.csv(here("data", "overall_mrp_preds_all.csv"))
+
+age_overall <- read.csv(here("data", "age_mrp_preds_all.csv"))
+
+education_overall <- read.csv(here("data", "degree_mrp_preds_all.csv"))
+
+ethnicity_overall <- read.csv(here("data", "ethnicity_mrp_preds_all.csv"))
+
+sex_overall <- read.csv(here("data", "sex_mrp_preds_all.csv"))
+
+housing_overall <- read.csv(here("data", "housing_mrp_preds_all.csv"))
+
+
+all_overall_1 <- all_overall %>%
+  mutate(
+    across(c(Conservative, Left, Other, Reform.UK, WNV), ~ .x * 100),
+    row_total = Conservative + Left + Other + Reform.UK + WNV
+  )
+
+
+age_overall_1 <- age_overall %>%
+  mutate(
+    across(c(Conservative, Left, Other, Reform.UK, WNV), ~ .x * 100),
+    row_total = Conservative + Left + Other + Reform.UK + WNV
+  )
+ 
+  
+
+  
+education_overall_1 <- education_overall %>% 
+ mutate(
+    across(c(Conservative, Left, Other, Reform.UK, WNV), ~ .x * 100),
+    row_total = Conservative + Left + Other + Reform.UK + WNV
+  )
+ 
+  
+sex_overall_1 <- sex_overall %>% 
+ mutate(
+    across(c(Conservative, Left, Other, Reform.UK, WNV), ~ .x * 100),
+    row_total = Conservative + Left + Other + Reform.UK + WNV
+  )
+  
+  
+ethnicity_overall_1 <- ethnicity_overall %>% 
+  mutate(
+    across(c(Conservative, Left, Other, Reform.UK, WNV), ~ .x * 100),
+    row_total = Conservative + Left + Other + Reform.UK + WNV
+  )
+  
+
+  
+
+  
+  
+  
+housing_overall_1 <- housing_overall %>% 
+    mutate(
+    across(c(Conservative, Left, Other, Reform.UK, WNV), ~ .x * 100),
+    row_total = Conservative + Left + Other + Reform.UK + WNV
+  )
+    
+  
+  
+  
+  
+write.csv(all_overall_1, here("output", "all_overall_1.csv"), row.names = FALSE)
+  
+
+write.csv(age_overall_1, here("output", "age_overall_1.csv"), row.names = FALSE)
+
+
+write.csv(education_overall_1, here("output", "education_overall_1.csv"), row.names = FALSE)
+
+write.csv(ethnicity_overall_1, here("output", "ethnicity_overall_1.csv"), row.names = FALSE)
+
+
+write.csv(housing_overall_1, here("output", "housing_overall_1.csv"), row.names = FALSE)
+
+```
+
+
+
+
+
+
+```{r}
+
+overall_results_normalized <- all_overall %>%
+  mutate(
+    row_total = rowSums(select(., Conservative:WNV)),
+    across(
+      c(Conservative, Left, Other, Reform.UK, WNV),
+      ~ .x / row_total * 100,
+      .names = "{.col}_normalized"
+    )
+  ) %>%
+  select(const_name, ends_with("_normalized"))
+
+
+
+sex_results_normalized <- sex_overall %>%
+  mutate(
+    row_total = rowSums(select(., Conservative:WNV)),
+    across(
+      c(Conservative, Left, Other, Reform.UK, WNV),
+      ~ .x / row_total * 100,
+      .names = "{.col}_normalized"
+    )
+  ) %>%
+  select(const_name, sex_level, ends_with("_normalized"))
+
+
+
+
+
+edu_results_normalized <- education_overall %>%
+  mutate(
+    row_total = rowSums(select(., Conservative:WNV)),
+    across(
+      c(Conservative, Left, Other, Reform.UK, WNV),
+      ~ .x / row_total * 100,
+      .names = "{.col}_normalized"
+    )
+  ) %>%
+  select(const_name, edu_level, ends_with("_normalized"))
+
+
+
+ethnicity_results_normalized <- ethnicity_overall %>%
+  mutate(
+    row_total = rowSums(select(., Conservative:WNV)),
+    across(
+      c(Conservative, Left, Other, Reform.UK, WNV),
+      ~ .x / row_total * 100,
+      .names = "{.col}_normalized"
+    )
+  ) %>%
+  select(const_name, ethn_level, ends_with("_normalized"))
+
+
+
+
+
+
+age_results_normalized <- age_overall %>%
+  mutate(
+    row_total = rowSums(select(., Conservative:WNV)),
+    across(
+      c(Conservative, Left, Other, Reform.UK, WNV),
+      ~ .x / row_total * 100,
+      .names = "{.col}_normalized"
+    )
+  ) %>%
+  select(const_name, age_level, ends_with("_normalized"))
+
+
+
+housing_results_normalized <- housing_overall %>%
+  mutate(
+    row_total = rowSums(select(., Conservative:WNV)),
+    across(
+      c(Conservative, Left, Other, Reform.UK, WNV),
+      ~ .x / row_total * 100,
+      .names = "{.col}_normalized"
+    )
+  ) %>%
+  select(const_name, housing, ends_with("_normalized"))
+
+
+
+
+  
+write.csv(overall_results_normalized, here("output", "overall_results_normalized.csv"), row.names = FALSE)
+  
+
+write.csv(age_results_normalized, here("output", "age_results_normalized.csv"), row.names = FALSE)
+
+
+write.csv(edu_results_normalized, here("output", "edu_reults_normalized.csv"), row.names = FALSE)
+
+write.csv(ethnicity_results_normalized, here("output", "ethnicity_results_normalized.csv"), row.names = FALSE)
+
+
+write.csv(housing_results_normalized, here("output", "housing_results_normalized.csv"), row.names = FALSE)
+
+
+
+
+
